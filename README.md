@@ -161,14 +161,3 @@ astro dev logs
 - Verify credentials in SQLECTRON match those in `astro config.yaml`.
 
 💡 *Happy Coding! 🚀*
-```
-
----
-
-### How to Use This Updated README
-
-1. **Update Repository URL (Optional):**  
-   If your project repository is within your GitHub profile (for example, `https://github.com/austinLorenzMccoy/adzuna-job-data-ingestion-pipeline`), update the GitHub link in both the badge and the "GitHub Repository" section.
-
-2. **Commit & Push:**  
-   Save the file as `README.md` in your repository root, commit your changes, and push them to GitHub.
