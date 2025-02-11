@@ -1,0 +1,46 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    ports:
+      - "5433:5432"  # Changed host port to avoid conflicts
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: airflow
+      POSTGRES_HOST_AUTH_METHOD: md5  # More secure authentication
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - airflow_network
+
+  webserver:
+    image: apache/airflow:2.5.0
+    container_name: airflow_webserver
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
+    networks:
+      - airflow_network
+
+networks:
+  airflow_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
